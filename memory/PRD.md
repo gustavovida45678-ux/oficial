@@ -8,7 +8,7 @@ Clonar e reproduzir o projeto do repositório GitHub `https://github.com/gustavo
 ### Backend (FastAPI)
 - **server.py**: API principal com endpoints para chat, análise de imagens e geração de imagens
 - **image_annotator.py**: Sistema avançado de anotações visuais profissionais (CALL/PUT, entry zones, SL/TP)
-- **MongoDB**: Armazenamento de mensagens do chat
+- **MongoDB**: Armazenamento de mensagens do chat com campos para imagens anotadas
 
 ### Frontend (React + Tailwind)
 - **App.js**: Componente principal do chat com exibição de cenários CALL/PUT
@@ -35,6 +35,7 @@ Clonar e reproduzir o projeto do repositório GitHub `https://github.com/gustavo
 7. ✅ Configuração de API key customizada
 8. ✅ Sistema de alertas automáticos para sinais CALL/PUT
 9. ✅ Geração automática de cenários CALL e PUT em imagens separadas
+10. ✅ Persistência de imagens anotadas no banco de dados
 
 ## What's Been Implemented
 
@@ -43,32 +44,26 @@ Clonar e reproduzir o projeto do repositório GitHub `https://github.com/gustavo
 - [x] Configuração de variáveis de ambiente (.env)
 - [x] Instalação de dependências (Python/Node)
 - [x] Mount de arquivos estáticos para uploads
-- [x] Backend 100% funcional
+- [x] Backend funcional
 - [x] Frontend funcional
 - [x] Integração com GPT-5.1 funcionando
-- [x] Geração de imagens funcionando
 
 ### Jan 26, 2026 - Sessão 2 (Melhorias de UX)
 - [x] Correção do modal de settings (fecha ao clicar fora)
 - [x] Sistema de alertas automáticos de trading
-  - Detecta sinais CALL/PUT nas respostas da IA
-  - Extrai Stop Loss, Take Profit, Confiança, Ativo
-  - Notificação visual com animações
-  - Som de alerta (ON/OFF toggle)
-  - Auto-remoção após 30 segundos
 
 ### Jan 26, 2026 - Sessão 3 (Gerador de Imagens Profissional)
 - [x] Reescrita completa do image_annotator.py
 - [x] Sistema de anotações profissionais estilo TradingView:
   - Entry Zone (retângulo azul semi-transparente)
   - CALL/PUT Entry com setas direcionais
-  - Stop Loss e Take Profit com linhas horizontais
-  - Trade Signal / Strong Signal labels
-  - Barra de confiança visual
+  - Stop Loss e Take Profit com linhas e labels
+  - Trade Signal / REJEIÇÃO labels
   - Info box com parâmetros da operação
   - Exit label (1-2 candles)
 - [x] Geração automática de AMBOS cenários (CALL e PUT) para cada gráfico
-- [x] Backend atualizado com campos call_annotated_paths e put_annotated_paths
+- [x] Backend atualizado para salvar campos no MongoDB
+- [x] Fix de URL do endpoint de uploads (/api/uploads)
 - [x] Frontend com seções visuais distintas:
   - Seção verde (📈 Cenário CALL) com borda verde
   - Seção vermelha (📉 Cenário PUT) com borda vermelha
@@ -79,24 +74,18 @@ Clonar e reproduzir o projeto do repositório GitHub `https://github.com/gustavo
 - Nenhum item pendente
 
 ### P1 (Alta Prioridade) - Concluído
-- ✅ Modal de settings corrigido
-- ✅ Sistema de alertas implementado
-- ✅ Gerador de imagens profissional
+- ✅ Todas as funcionalidades principais
 
 ### P2 (Média Prioridade)
-- Adicionar histórico de conversas por sessão
 - Exportar análises em PDF
-- Persistir configuração de alertas no localStorage
 - Adicionar mais padrões de candles na detecção
 
 ### Futuros/Enhancement
 - Integração com exchanges de trading (Binance, Coinbase)
 - Alertas via notificação push do navegador
-- Dashboard de análises anteriores
 - Backtesting de sinais detectados
-- Detecção automática de suportes/resistências no gráfico
 
 ## Next Tasks
-1. Implementar persistência de configurações de alerta
-2. Adicionar filtros de alertas por ativo/confiança
-3. Melhorar detecção de padrões de candles
+1. Testar com gráficos reais de trading
+2. Melhorar detecção de padrões
+3. Adicionar mais indicadores técnicos
