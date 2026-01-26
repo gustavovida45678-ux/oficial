@@ -194,6 +194,13 @@ function App() {
         if (response.data.annotated_image_paths) {
           assistantMsg.annotated_image_urls = response.data.annotated_image_paths;
         }
+        // Add CALL and PUT scenario images
+        if (response.data.call_annotated_paths) {
+          assistantMsg.call_annotated_urls = response.data.call_annotated_paths;
+        }
+        if (response.data.put_annotated_paths) {
+          assistantMsg.put_annotated_urls = response.data.put_annotated_paths;
+        }
 
         setMessages((prev) => [
           ...prev,
