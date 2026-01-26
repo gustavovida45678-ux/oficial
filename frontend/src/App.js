@@ -447,8 +447,53 @@ function App() {
                   className="message-image"
                 />
               )}
-              {/* Show annotated images if available */}
-              {message.annotated_image_urls && message.annotated_image_urls.length > 0 && (
+              {/* Show CALL scenario images */}
+              {message.call_annotated_urls && message.call_annotated_urls.length > 0 && (
+                <div className="annotated-images-section call-section">
+                  <div className="annotated-label call-label">
+                    📈 Cenário CALL (Compra)
+                  </div>
+                  <div className="message-images-grid">
+                    {message.call_annotated_urls.map((url, idx) => (
+                      url && (
+                        <img
+                          key={`call-${idx}`}
+                          src={`${BACKEND_URL}${url}`}
+                          alt={`CALL Cenário ${idx + 1}`}
+                          className="message-image annotated-image call-image"
+                          data-testid={`call-image-${idx}`}
+                        />
+                      )
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {/* Show PUT scenario images */}
+              {message.put_annotated_urls && message.put_annotated_urls.length > 0 && (
+                <div className="annotated-images-section put-section">
+                  <div className="annotated-label put-label">
+                    📉 Cenário PUT (Venda)
+                  </div>
+                  <div className="message-images-grid">
+                    {message.put_annotated_urls.map((url, idx) => (
+                      url && (
+                        <img
+                          key={`put-${idx}`}
+                          src={`${BACKEND_URL}${url}`}
+                          alt={`PUT Cenário ${idx + 1}`}
+                          className="message-image annotated-image put-image"
+                          data-testid={`put-image-${idx}`}
+                        />
+                      )
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {/* Legacy: Show annotated images if available (for backward compatibility) */}
+              {message.annotated_image_urls && message.annotated_image_urls.length > 0 && 
+               !message.call_annotated_urls && !message.put_annotated_urls && (
                 <div className="annotated-images-section">
                   <div className="annotated-label">📊 Análise Visual com Recomendações</div>
                   <div className="message-images-grid">
