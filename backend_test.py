@@ -206,8 +206,8 @@ class ChatAPITester:
                     user_valid = all(field in user_msg for field in ['id', 'role', 'content', 'timestamp'])
                     ai_valid = all(field in ai_msg for field in ['id', 'role', 'content', 'timestamp'])
                     
-                    # Check if user message has image_url
-                    has_image_url = 'image_url' in user_msg and user_msg['image_url'] is not None
+                    # Check if user message has image_urls (plural)
+                    has_image_url = 'image_urls' in user_msg and user_msg['image_urls'] is not None and len(user_msg['image_urls']) > 0
                     
                     if user_valid and ai_valid and user_msg['role'] == 'user' and ai_msg['role'] == 'assistant' and has_image_url:
                         details += f", Image ID: {data['image_id']}, AI Response: {ai_msg['content'][:100]}..."
