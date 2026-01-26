@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Send, Image as ImageIcon, X, Sparkles, Settings } from "lucide-react";
 import ApiKeySettings from "./components/ApiKeySettings";
+import TradingAlerts from "./components/TradingAlerts";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 const API = `${BACKEND_URL}/api`;
@@ -20,6 +21,7 @@ function App() {
   const [showImageGenModal, setShowImageGenModal] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [imageGenPrompt, setImageGenPrompt] = useState("");
+  const [alertsEnabled, setAlertsEnabled] = useState(true);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const fileInputRef = useRef(null);
