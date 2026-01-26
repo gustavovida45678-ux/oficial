@@ -315,7 +315,7 @@ class ChatAPITester:
                 for msg in user_msgs:
                     if test_question in msg['content']:
                         test_msg_found = True
-                        if 'image_url' in msg and msg['image_url']:
+                        if 'image_urls' in msg and msg['image_urls'] and len(msg['image_urls']) > 0:
                             has_image_url = True
                         break
                 
