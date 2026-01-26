@@ -315,6 +315,9 @@ function App() {
     <div className="App neural-void-bg">
       <div className="noise-overlay" />
 
+      {/* Trading Alerts System */}
+      <TradingAlerts messages={messages} enabled={alertsEnabled} />
+
       {/* Settings Button */}
       <button
         className="settings-button"
