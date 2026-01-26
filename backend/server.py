@@ -605,6 +605,10 @@ async def root():
 # Include the router in the main app
 app.include_router(api_router)
 
+# Mount static files for uploads directory
+os.makedirs("uploads", exist_ok=True)
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
