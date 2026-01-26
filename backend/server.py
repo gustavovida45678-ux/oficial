@@ -522,6 +522,8 @@ Responda SEMPRE em português brasileiro de forma profissional."""
             image_ids=image_ids,
             image_paths=image_paths,
             annotated_image_paths=annotated_image_paths if annotated_image_paths else None,
+            call_annotated_paths=call_annotated_paths if call_annotated_paths else None,
+            put_annotated_paths=put_annotated_paths if put_annotated_paths else None,
             user_message=user_message,
             assistant_message=assistant_message
         )
