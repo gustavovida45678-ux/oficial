@@ -39,6 +39,9 @@ class Message(BaseModel):
     role: str  # 'user' or 'assistant'
     content: str
     image_urls: Optional[List[str]] = None
+    annotated_image_urls: Optional[List[str]] = None
+    call_annotated_urls: Optional[List[str]] = None
+    put_annotated_urls: Optional[List[str]] = None
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class ChatRequest(BaseModel):
