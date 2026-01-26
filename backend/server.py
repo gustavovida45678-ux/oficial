@@ -510,10 +510,18 @@ Responda SEMPRE em português brasileiro de forma profissional."""
             logging.error(traceback.format_exc())
             # Continue without annotated images
         
-        # Create assistant message
+        # Filter out None values
+        filtered_annotated = [p for p in annotated_image_paths if p] if annotated_image_paths else None
+        filtered_call = [p for p in call_annotated_paths if p] if call_annotated_paths else None
+        filtered_put = [p for p in put_annotated_paths if p] if put_annotated_paths else None
+        
+        # Create assistant message with annotated image paths
         assistant_message = Message(
             role="assistant",
-            content=ai_response
+            content=ai_response,
+            annotated_image_urls=filtered_annotated,
+            call_annotated_urls=filtered_call,
+            put_annotated_urls=filtered_put
         )
         
         # Save assistant message to database
@@ -524,9 +532,9 @@ Responda SEMPRE em português brasileiro de forma profissional."""
         return MultipleImagesAnalysisResponse(
             image_ids=image_ids,
             image_paths=image_paths,
-            annotated_image_paths=[p for p in annotated_image_paths if p] if annotated_image_paths else None,
-            call_annotated_paths=[p for p in call_annotated_paths if p] if call_annotated_paths else None,
-            put_annotated_paths=[p for p in put_annotated_paths if p] if put_annotated_paths else None,
+            annotated_image_paths=filtered_annotated,
+            call_annotated_paths=filtered_call,
+            put_annotated_paths=filtered_put,
             user_message=user_message,
             assistant_message=assistant_message
         )
