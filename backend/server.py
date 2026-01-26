@@ -461,32 +461,50 @@ Responda SEMPRE em português brasileiro de forma profissional."""
         )
         ai_response = await chat_client.send_message(user_msg)
         
-        # Generate annotated images if CALL/PUT recommendations are detected
+        # Generate annotated images for both CALL and PUT scenarios
         annotated_image_paths = []
+        call_annotated_paths = []
+        put_annotated_paths = []
+        
         try:
             annotator = ChartAnnotator()
             signals = annotator.extract_trading_signals(ai_response)
             
-            if signals['action'] in ['CALL', 'PUT']:
-                # Annotate each image
-                for idx, (img_bytes, img_id) in enumerate(zip(original_image_bytes, image_ids)):
-                    try:
-                        annotated_bytes = annotator.annotate_chart(img_bytes, ai_response, signals)
-                        
-                        # Save annotated image
-                        annotated_filename = f"{img_id}_annotated.png"
-                        annotated_path = f"uploads/{annotated_filename}"
-                        
-                        with open(annotated_path, "wb") as f:
-                            f.write(annotated_bytes)
-                        
-                        annotated_image_paths.append(f"/uploads/{annotated_filename}")
-                        logging.info(f"Generated annotated image {idx + 1}: {annotated_path}")
-                    except Exception as e:
-                        logging.error(f"Error annotating image {idx + 1}: {str(e)}")
-                        annotated_image_paths.append(None)
+            # Generate both scenarios for each image
+            for idx, (img_bytes, img_id) in enumerate(zip(original_image_bytes, image_ids)):
+                try:
+                    call_bytes, put_bytes = annotator.generate_both_scenarios(img_bytes, ai_response)
+                    
+                    # Save CALL annotated image
+                    call_filename = f"{img_id}_call.png"
+                    call_path = f"uploads/{call_filename}"
+                    with open(call_path, "wb") as f:
+                        f.write(call_bytes)
+                    call_annotated_paths.append(f"/uploads/{call_filename}")
+                    
+                    # Save PUT annotated image
+                    put_filename = f"{img_id}_put.png"
+                    put_path = f"uploads/{put_filename}"
+                    with open(put_path, "wb") as f:
+                        f.write(put_bytes)
+                    put_annotated_paths.append(f"/uploads/{put_filename}")
+                    
+                    # Add main annotated based on detected signal
+                    if signals['action'] == 'PUT':
+                        annotated_image_paths.append(f"/uploads/{put_filename}")
+                    else:
+                        annotated_image_paths.append(f"/uploads/{call_filename}")
+                    
+                    logging.info(f"Generated CALL and PUT images for image {idx + 1}")
+                except Exception as e:
+                    logging.error(f"Error annotating image {idx + 1}: {str(e)}")
+                    annotated_image_paths.append(None)
+                    call_annotated_paths.append(None)
+                    put_annotated_paths.append(None)
         except Exception as e:
             logging.error(f"Error in annotation process: {str(e)}")
+            import traceback
+            logging.error(traceback.format_exc())
             # Continue without annotated images
         
         # Create assistant message
