@@ -686,6 +686,17 @@
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
   max-height: 90vh;
   overflow-y: auto;
+  position: relative;
+  z-index: 201;
+}
+
+/* Fix modal overlay click */
+.modal-overlay {
+  cursor: pointer;
+}
+
+.modal-overlay > * {
+  cursor: default;
 }
 
 .setting-section {
