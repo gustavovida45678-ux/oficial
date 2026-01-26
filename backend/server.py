@@ -176,7 +176,7 @@ async def analyze_image(
         user_message = Message(
             role="user",
             content=question,
-            image_urls=[f"/uploads/{image_filename}"]
+            image_urls=[f"/api/uploads/{image_filename}"]
         )
         
         # Save user message to database
@@ -321,9 +321,9 @@ Responda SEMPRE em português brasileiro de forma profissional e detalhada."""
         return ImageAnalysisResponse(
             image_id=image_id,
             image_path=image_path,
-            annotated_image_path=f"/uploads/{annotated_filename}" if annotated_image_path else None,
-            call_annotated_path=f"/uploads/{call_filename}" if call_annotated_path else None,
-            put_annotated_path=f"/uploads/{put_filename}" if put_annotated_path else None,
+            annotated_image_path=f"/api/uploads/{annotated_filename}" if annotated_image_path else None,
+            call_annotated_path=f"/api/uploads/{call_filename}" if call_annotated_path else None,
+            put_annotated_path=f"/api/uploads/{put_filename}" if put_annotated_path else None,
             user_message=user_message,
             assistant_message=assistant_message
         )
@@ -395,7 +395,7 @@ async def analyze_multiple_images(
             
             image_ids.append(image_id)
             image_paths.append(image_path)
-            image_urls.append(f"/uploads/{image_filename}")
+            image_urls.append(f"/api/uploads/{image_filename}")
             
             # Create image content for AI
             image_content = ImageContent(image_base64=image_base64)
@@ -480,20 +480,20 @@ Responda SEMPRE em português brasileiro de forma profissional."""
                     call_path = f"uploads/{call_filename}"
                     with open(call_path, "wb") as f:
                         f.write(call_bytes)
-                    call_annotated_paths.append(f"/uploads/{call_filename}")
+                    call_annotated_paths.append(f"/api/uploads/{call_filename}")
                     
                     # Save PUT annotated image
                     put_filename = f"{img_id}_put.png"
                     put_path = f"uploads/{put_filename}"
                     with open(put_path, "wb") as f:
                         f.write(put_bytes)
-                    put_annotated_paths.append(f"/uploads/{put_filename}")
+                    put_annotated_paths.append(f"/api/uploads/{put_filename}")
                     
                     # Add main annotated based on detected signal
                     if signals['action'] == 'PUT':
-                        annotated_image_paths.append(f"/uploads/{put_filename}")
+                        annotated_image_paths.append(f"/api/uploads/{put_filename}")
                     else:
-                        annotated_image_paths.append(f"/uploads/{call_filename}")
+                        annotated_image_paths.append(f"/api/uploads/{call_filename}")
                     
                     logging.info(f"Generated CALL and PUT images for image {idx + 1}")
                 except Exception as e:
@@ -594,7 +594,7 @@ async def generate_image(request: ImageGenerationRequest, x_custom_api_key: Opti
         assistant_message = Message(
             role="assistant",
             content=f"✅ Imagem gerada com sucesso a partir do prompt:\n\n**{request.prompt}**",
-            image_urls=[f"/uploads/{image_filename}"]
+            image_urls=[f"/api/uploads/{image_filename}"]
         )
         
         # Save assistant message to database
