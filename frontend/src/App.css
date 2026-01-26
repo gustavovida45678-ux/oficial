@@ -848,3 +848,222 @@
 .gap-2 {
   gap: 0.5rem;
 }
+
+/* Trading Alert System */
+.trading-alert-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 400px;
+}
+
+.trading-alert {
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 1rem;
+  padding: 1rem 1.25rem;
+  animation: alertSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.trading-alert::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+}
+
+.trading-alert.alert-call {
+  border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.trading-alert.alert-call::before {
+  background: linear-gradient(90deg, #22c55e, #4ade80);
+}
+
+.trading-alert.alert-put {
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.trading-alert.alert-put::before {
+  background: linear-gradient(90deg, #ef4444, #f87171);
+}
+
+.trading-alert.alert-strong {
+  animation: alertSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), alertPulse 2s ease-in-out infinite;
+}
+
+@keyframes alertSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100px) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes alertPulse {
+  0%, 100% {
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 20px 40px -10px rgba(124, 58, 237, 0.3), 0 0 30px -5px currentColor;
+  }
+}
+
+.alert-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.alert-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.alert-badge.badge-call {
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.alert-badge.badge-put {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.alert-close {
+  background: transparent;
+  border: none;
+  color: #a1a1aa;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.alert-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.alert-content {
+  color: #e4e4e7;
+}
+
+.alert-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.alert-details {
+  font-size: 0.875rem;
+  color: #a1a1aa;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.alert-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.alert-detail-item strong {
+  color: #e4e4e7;
+}
+
+.alert-confidence {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.confidence-bar {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.confidence-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease-out;
+}
+
+.confidence-fill.high {
+  background: linear-gradient(90deg, #22c55e, #4ade80);
+}
+
+.confidence-fill.medium {
+  background: linear-gradient(90deg, #eab308, #facc15);
+}
+
+.confidence-fill.low {
+  background: linear-gradient(90deg, #ef4444, #f87171);
+}
+
+.alert-timestamp {
+  font-size: 0.75rem;
+  color: #71717a;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Alert notification sound indicator */
+.alert-sound-indicator {
+  position: fixed;
+  bottom: 7rem;
+  left: 2rem;
+  background: rgba(124, 58, 237, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  color: #c084fc;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  z-index: 40;
+}
+
+.alert-sound-indicator:hover {
+  background: rgba(124, 58, 237, 0.4);
+}
+
+.alert-sound-indicator.muted {
+  color: #71717a;
+  border-color: rgba(113, 113, 122, 0.3);
+}
