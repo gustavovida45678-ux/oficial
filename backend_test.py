@@ -8,7 +8,7 @@ import io
 from PIL import Image
 
 class ChatAPITester:
-    def __init__(self, base_url="https://chatbot-pt-1.preview.emergentagent.com"):
+    def __init__(self, base_url="https://192f7439-67c1-4c06-8cd5-b18ce54dd85a.preview.emergentagent.com"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
         self.tests_run = 0
