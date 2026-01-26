@@ -52,6 +52,8 @@ class ImageAnalysisResponse(BaseModel):
     image_id: str
     image_path: str
     annotated_image_path: Optional[str] = None
+    call_annotated_path: Optional[str] = None
+    put_annotated_path: Optional[str] = None
     user_message: Message
     assistant_message: Message
 
@@ -59,6 +61,8 @@ class MultipleImagesAnalysisResponse(BaseModel):
     image_ids: List[str]
     image_paths: List[str]
     annotated_image_paths: Optional[List[str]] = None
+    call_annotated_paths: Optional[List[str]] = None
+    put_annotated_paths: Optional[List[str]] = None
     user_message: Message
     assistant_message: Message
 
