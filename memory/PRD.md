@@ -7,11 +7,11 @@ Clonar e reproduzir o projeto do repositório GitHub `https://github.com/gustavo
 
 ### Backend (FastAPI)
 - **server.py**: API principal com endpoints para chat, análise de imagens e geração de imagens
-- **image_annotator.py**: Módulo para adicionar anotações visuais nos gráficos (CALL/PUT, suporte/resistência)
+- **image_annotator.py**: Sistema avançado de anotações visuais profissionais (CALL/PUT, entry zones, SL/TP)
 - **MongoDB**: Armazenamento de mensagens do chat
 
 ### Frontend (React + Tailwind)
-- **App.js**: Componente principal do chat
+- **App.js**: Componente principal do chat com exibição de cenários CALL/PUT
 - **ApiKeySettings.js**: Configurações de API key (Emergent ou própria OpenAI)
 - **TradingAlerts.js**: Sistema de alertas automáticos para sinais de trading
 - Design "Neural Void" com tema escuro e roxo
@@ -34,6 +34,7 @@ Clonar e reproduzir o projeto do repositório GitHub `https://github.com/gustavo
 6. ✅ Armazenamento de histórico no MongoDB
 7. ✅ Configuração de API key customizada
 8. ✅ Sistema de alertas automáticos para sinais CALL/PUT
+9. ✅ Geração automática de cenários CALL e PUT em imagens separadas
 
 ## What's Been Implemented
 
@@ -43,11 +44,11 @@ Clonar e reproduzir o projeto do repositório GitHub `https://github.com/gustavo
 - [x] Instalação de dependências (Python/Node)
 - [x] Mount de arquivos estáticos para uploads
 - [x] Backend 100% funcional
-- [x] Frontend 98% funcional
+- [x] Frontend funcional
 - [x] Integração com GPT-5.1 funcionando
 - [x] Geração de imagens funcionando
 
-### Jan 26, 2026 - Sessão 2 (Melhorias)
+### Jan 26, 2026 - Sessão 2 (Melhorias de UX)
 - [x] Correção do modal de settings (fecha ao clicar fora)
 - [x] Sistema de alertas automáticos de trading
   - Detecta sinais CALL/PUT nas respostas da IA
@@ -55,7 +56,22 @@ Clonar e reproduzir o projeto do repositório GitHub `https://github.com/gustavo
   - Notificação visual com animações
   - Som de alerta (ON/OFF toggle)
   - Auto-remoção após 30 segundos
-  - Indicador de sinal forte (🔥)
+
+### Jan 26, 2026 - Sessão 3 (Gerador de Imagens Profissional)
+- [x] Reescrita completa do image_annotator.py
+- [x] Sistema de anotações profissionais estilo TradingView:
+  - Entry Zone (retângulo azul semi-transparente)
+  - CALL/PUT Entry com setas direcionais
+  - Stop Loss e Take Profit com linhas horizontais
+  - Trade Signal / Strong Signal labels
+  - Barra de confiança visual
+  - Info box com parâmetros da operação
+  - Exit label (1-2 candles)
+- [x] Geração automática de AMBOS cenários (CALL e PUT) para cada gráfico
+- [x] Backend atualizado com campos call_annotated_paths e put_annotated_paths
+- [x] Frontend com seções visuais distintas:
+  - Seção verde (📈 Cenário CALL) com borda verde
+  - Seção vermelha (📉 Cenário PUT) com borda vermelha
 
 ## Prioritized Backlog
 
@@ -65,19 +81,22 @@ Clonar e reproduzir o projeto do repositório GitHub `https://github.com/gustavo
 ### P1 (Alta Prioridade) - Concluído
 - ✅ Modal de settings corrigido
 - ✅ Sistema de alertas implementado
+- ✅ Gerador de imagens profissional
 
 ### P2 (Média Prioridade)
 - Adicionar histórico de conversas por sessão
 - Exportar análises em PDF
 - Persistir configuração de alertas no localStorage
+- Adicionar mais padrões de candles na detecção
 
 ### Futuros/Enhancement
 - Integração com exchanges de trading (Binance, Coinbase)
 - Alertas via notificação push do navegador
 - Dashboard de análises anteriores
 - Backtesting de sinais detectados
+- Detecção automática de suportes/resistências no gráfico
 
 ## Next Tasks
 1. Implementar persistência de configurações de alerta
 2. Adicionar filtros de alertas por ativo/confiança
-3. Criar histórico de alertas passados
+3. Melhorar detecção de padrões de candles
