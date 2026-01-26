@@ -322,6 +322,8 @@ Responda SEMPRE em português brasileiro de forma profissional e detalhada."""
             image_id=image_id,
             image_path=image_path,
             annotated_image_path=f"/uploads/{annotated_filename}" if annotated_image_path else None,
+            call_annotated_path=f"/uploads/{call_filename}" if call_annotated_path else None,
+            put_annotated_path=f"/uploads/{put_filename}" if put_annotated_path else None,
             user_message=user_message,
             assistant_message=assistant_message
         )
