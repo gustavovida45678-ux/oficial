@@ -352,9 +352,7 @@ class ChartAnnotator:
             )
         
         # === DRAW PATTERN/SIGNAL INDICATOR ===
-        pattern_text = signals.get('pattern', 'Strong Signal')
-        if signals.get('strategy'):
-            pattern_text = signals['strategy']
+        pattern_text = signals.get('pattern') or signals.get('strategy') or 'Strong Signal'
         
         signal_x = chart_left + 30
         signal_y = zone_y1 + int((zone_y2 - zone_y1) / 2) - 20
