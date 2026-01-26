@@ -521,9 +521,9 @@ Responda SEMPRE em português brasileiro de forma profissional."""
         return MultipleImagesAnalysisResponse(
             image_ids=image_ids,
             image_paths=image_paths,
-            annotated_image_paths=annotated_image_paths if annotated_image_paths else None,
-            call_annotated_paths=call_annotated_paths if call_annotated_paths else None,
-            put_annotated_paths=put_annotated_paths if put_annotated_paths else None,
+            annotated_image_paths=[p for p in annotated_image_paths if p] if annotated_image_paths else None,
+            call_annotated_paths=[p for p in call_annotated_paths if p] if call_annotated_paths else None,
+            put_annotated_paths=[p for p in put_annotated_paths if p] if put_annotated_paths else None,
             user_message=user_message,
             assistant_message=assistant_message
         )
