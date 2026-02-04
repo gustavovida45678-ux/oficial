@@ -506,11 +506,11 @@ class TradingEngine:
     def _calculate_levels(self, entry: float, atr: float, 
                          signal: SignalType) -> Tuple[float, float, float]:
         """
-        Calcula Stop Loss e Take Profits
+        Calcula Stop Loss e Take Profits (OTIMIZADO)
         Returns: (stop_loss, take_profit_1, take_profit_2)
         """
-        # Stop Loss: 1.5x ATR
-        sl_distance = atr * 1.5
+        # Stop Loss: 2x ATR (mais espaço para respirar)
+        sl_distance = atr * 2.0  # Aumentado de 1.5x para 2x
         
         # Take Profit 1: 2x risco (RR 1:2)
         tp1_distance = sl_distance * 2
