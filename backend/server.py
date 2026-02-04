@@ -20,6 +20,9 @@ from image_annotator import ChartAnnotator
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
+# Use tempfile for uploads to avoid disk bloat
+UPLOAD_FOLDER = tempfile.gettempdir()
+
 # MongoDB connection
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
