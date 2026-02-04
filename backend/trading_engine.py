@@ -142,18 +142,34 @@ class TechnicalIndicators:
     @staticmethod
     def calculate_macd(prices: List[float]) -> Tuple[float, float, float]:
         """
-        Calcula MACD (Moving Average Convergence Divergence)
+        Calcula MACD (Moving Average Convergence Divergence) - MELHORADO
         Returns: (macd_line, signal_line, histogram)
         """
         if len(prices) < 26:
             return 0.0, 0.0, 0.0
         
+        # Calcular EMAs de forma mais precisa
         ema_12 = TechnicalIndicators.calculate_ema(prices, 12)
         ema_26 = TechnicalIndicators.calculate_ema(prices, 26)
         macd_line = ema_12 - ema_26
         
-        # Signal line (EMA 9 do MACD)
-        signal_line = macd_line * 0.2  # Simplified
+        # Signal line seria EMA 9 do MACD line, mas simplificamos
+        # usando os últimos valores
+        if len(prices) >= 35:
+            macd_values = []
+            for i in range(len(prices) - 34, len(prices)):
+                if i >= 26:
+                    e12 = TechnicalIndicators.calculate_ema(prices[:i+1], 12)
+                    e26 = TechnicalIndicators.calculate_ema(prices[:i+1], 26)
+                    macd_values.append(e12 - e26)
+            
+            if macd_values:
+                signal_line = TechnicalIndicators.calculate_ema(macd_values, 9)
+            else:
+                signal_line = macd_line * 0.8
+        else:
+            signal_line = macd_line * 0.8
+        
         histogram = macd_line - signal_line
         
         return macd_line, signal_line, histogram
