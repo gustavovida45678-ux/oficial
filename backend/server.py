@@ -482,14 +482,14 @@ Responda SEMPRE em português brasileiro de forma profissional."""
                     
                     # Save CALL annotated image
                     call_filename = f"{img_id}_call.png"
-                    call_path = f"uploads/{call_filename}"
+                    call_path = os.path.join(UPLOAD_FOLDER, call_filename)
                     with open(call_path, "wb") as f:
                         f.write(call_bytes)
                     call_annotated_paths.append(f"/api/uploads/{call_filename}")
                     
                     # Save PUT annotated image
                     put_filename = f"{img_id}_put.png"
-                    put_path = f"uploads/{put_filename}"
+                    put_path = os.path.join(UPLOAD_FOLDER, put_filename)
                     with open(put_path, "wb") as f:
                         f.write(put_bytes)
                     put_annotated_paths.append(f"/api/uploads/{put_filename}")
