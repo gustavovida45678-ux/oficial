@@ -409,29 +409,35 @@ class TradingEngine:
     def _analyze_pullback(self, current_price: float, ema_20: float,
                           ema_50: float, trend: TrendType) -> Tuple[int, bool]:
         """
-        Analisa se há recuo válido para entrada
+        Analisa se há recuo válido para entrada (OTIMIZADO)
         Returns: (score_contribution, is_valid)
         """
         distance_to_ema20 = abs(current_price - ema_20) / ema_20 * 100
         
         if trend == TrendType.BULLISH:
-            # Para CALL, queremos que o preço esteja próximo ou acima da EMA20
-            if distance_to_ema20 <= 0.3:  # Muito próximo
+            # Para CALL, preço deve estar EM CIMA ou muito próximo da EMA20
+            price_vs_ema20 = ((current_price - ema_20) / ema_20) * 100
+            
+            # Ideal: preço ligeiramente acima da EMA20 (0.1% a 0.5%)
+            if 0.05 <= price_vs_ema20 <= 0.8:
                 return 25, True
-            elif distance_to_ema20 <= 0.5:
+            elif -0.3 <= price_vs_ema20 < 0.05:  # Muito próximo
                 return 20, True
-            elif distance_to_ema20 <= 1.0:
+            elif 0.8 < price_vs_ema20 <= 1.5:  # Um pouco distante mas ok
                 return 15, True
             else:
                 return 0, False
         
         elif trend == TrendType.BEARISH:
-            # Para PUT, queremos que o preço esteja próximo ou abaixo da EMA20
-            if distance_to_ema20 <= 0.3:
+            # Para PUT, preço deve estar ABAIXO ou muito próximo da EMA20
+            price_vs_ema20 = ((current_price - ema_20) / ema_20) * 100
+            
+            # Ideal: preço ligeiramente abaixo da EMA20 (-0.1% a -0.5%)
+            if -0.8 <= price_vs_ema20 <= -0.05:
                 return 25, True
-            elif distance_to_ema20 <= 0.5:
+            elif -0.05 < price_vs_ema20 <= 0.3:  # Muito próximo
                 return 20, True
-            elif distance_to_ema20 <= 1.0:
+            elif -1.5 <= price_vs_ema20 < -0.8:  # Um pouco distante mas ok
                 return 15, True
             else:
                 return 0, False
