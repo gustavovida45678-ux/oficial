@@ -213,12 +213,12 @@ class ScalpingEngine:
         # === ANÁLISE DE SETUP ===
         
         if micro_trend == "UP":
-            score, reasons, signal_type = self._analyze_scalp_long(
+            signal_type, score, reasons = self._analyze_scalp_long(
                 current_price, ema_9, ema_21, rsi, momentum, volume_ratio
             )
         
         elif micro_trend == "DOWN":
-            score, reasons, signal_type = self._analyze_scalp_short(
+            signal_type, score, reasons = self._analyze_scalp_short(
                 current_price, ema_9, ema_21, rsi, momentum, volume_ratio
             )
         
