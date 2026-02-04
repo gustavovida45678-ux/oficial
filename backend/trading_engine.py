@@ -310,14 +310,38 @@ class TradingEngine:
         if pattern_score >= 12:
             reasons.append(f"✅ Padrão de candle detectado: {pattern}")
         
+        # === FILTRO CRÍTICO: MOMENTUM FORTE (MACD) ===
+        macd_line, signal_line, histogram = self.indicators.calculate_macd(closes)
+        momentum_confirmed = False
+        
+        if trend == TrendType.BULLISH:
+            # Para CALL: MACD deve estar positivo e crescendo
+            if macd_line > 0 and histogram > 0:
+                momentum_confirmed = True
+                score += 10  # Bônus de momentum
+                reasons.append(f"✅ Momentum de alta confirmado (MACD positivo)")
+            else:
+                warnings.append(f"⚠️ Momentum fraco - MACD não confirma alta")
+        elif trend == TrendType.BEARISH:
+            # Para PUT: MACD deve estar negativo e decrescendo
+            if macd_line < 0 and histogram < 0:
+                momentum_confirmed = True
+                score += 10  # Bônus de momentum
+                reasons.append(f"✅ Momentum de baixa confirmado (MACD negativo)")
+            else:
+                warnings.append(f"⚠️ Momentum fraco - MACD não confirma baixa")
+        
         # === DETERMINAR SINAL ===
         signal_type = SignalType.WAIT
         
         if score >= self.min_score:
-            if trend == TrendType.BULLISH and pullback_valid:
+            # REGRA CRÍTICA: Só entra se momentum confirmado
+            if trend == TrendType.BULLISH and pullback_valid and momentum_confirmed:
                 signal_type = SignalType.CALL
-            elif trend == TrendType.BEARISH and pullback_valid:
+            elif trend == TrendType.BEARISH and pullback_valid and momentum_confirmed:
                 signal_type = SignalType.PUT
+            elif not momentum_confirmed:
+                warnings.append(f"⚠️ Momentum não confirmado - aguardar confirmação MACD")
         else:
             warnings.append(f"⚠️ Score insuficiente ({score}/{self.min_score}) - aguardar setup melhor")
         
