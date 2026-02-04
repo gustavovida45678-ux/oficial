@@ -213,13 +213,13 @@ class TradingEngine:
     """
     
     def __init__(self, 
-                 min_score: int = 65,  # Reduzido de 70 para 65
-                 risk_reward_min: float = 1.8,  # Reduzido de 2.0 para 1.8
+                 min_score: int = 75,  # Aumentado de 65 para 75 (MUITO mais seletivo)
+                 risk_reward_min: float = 2.0,  # Voltando para 2.0 (melhor qualidade)
                  max_daily_loss_pct: float = 2.0,
                  max_drawdown_pct: float = 10.0):
         """
         Args:
-            min_score: Score mínimo para gerar sinal (0-100)
+            min_score: Score mínimo para gerar sinal (0-100) - AUMENTADO para maior seletividade
             risk_reward_min: Risk/Reward mínimo aceito
             max_daily_loss_pct: Perda máxima diária (% do capital)
             max_drawdown_pct: Drawdown máximo permitido
