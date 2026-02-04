@@ -464,7 +464,7 @@ class CryptoTradingEngine:
             reasons.append("✅ Tendência de baixa")
         
         # Decidir sinal
-        if score >= 70:
+        if score >= 60:  # Reduzido de 70 para 60
             return SignalType.PUT, score, reasons
         else:
             return SignalType.WAIT, score, reasons
