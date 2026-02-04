@@ -15,6 +15,7 @@ import tempfile
 from emergentintegrations.llm.chat import LlmChat, UserMessage, ImageContent
 from emergentintegrations.llm.openai.image_generation import OpenAIImageGeneration
 from image_annotator import ChartAnnotator
+from trading_engine import TradingEngine, Candle, TradingSignal, Backtester
 
 
 ROOT_DIR = Path(__file__).parent
