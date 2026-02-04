@@ -213,8 +213,8 @@ class TradingEngine:
     """
     
     def __init__(self, 
-                 min_score: int = 70,
-                 risk_reward_min: float = 2.0,
+                 min_score: int = 65,  # Reduzido de 70 para 65
+                 risk_reward_min: float = 1.8,  # Reduzido de 2.0 para 1.8
                  max_daily_loss_pct: float = 2.0,
                  max_drawdown_pct: float = 10.0):
         """
