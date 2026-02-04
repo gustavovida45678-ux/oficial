@@ -390,11 +390,10 @@ async def analyze_multiple_images(
             # Convert to base64
             image_base64 = base64.b64encode(image_bytes).decode("utf-8")
             
-            # Save image locally
-            os.makedirs("uploads", exist_ok=True)
+            # Save image to temp directory
             image_id = str(uuid.uuid4())
             image_filename = f"{image_id}_{file.filename}"
-            image_path = f"uploads/{image_filename}"
+            image_path = os.path.join(UPLOAD_FOLDER, image_filename)
             
             with open(image_path, "wb") as f:
                 f.write(image_bytes)
