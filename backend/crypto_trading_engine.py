@@ -396,7 +396,7 @@ class CryptoTradingEngine:
             reasons.append("✅ Tendência de alta")
         
         # Decidir sinal
-        if score >= 70:
+        if score >= 60:  # Reduzido de 70 para 60 (permitir mais trades)
             return SignalType.CALL, score, reasons
         else:
             return SignalType.WAIT, score, reasons
