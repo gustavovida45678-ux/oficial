@@ -732,6 +732,189 @@ async def root():
     return {"message": "Chat API is running"}
 
 
+# === NEW: Trading Engine Endpoints ===
+
+@api_router.post("/trade-setup", response_model=TradeSetupResponse)
+async def analyze_trade_setup(
+    request: TradeSetupRequest,
+    x_custom_api_key: Optional[str] = Header(None)
+):
+    """
+    🎯 NOVO ENDPOINT - Análise Matemática de Setup de Trading
+    
+    Fluxo: Candles → Trading Engine → Análise Técnica → IA Explica
+    
+    Este endpoint usa análise técnica avançada (EMA, RSI, ATR) para
+    determinar setups de alta probabilidade (70%+ win rate).
+    """
+    try:
+        # Converter input para objetos Candle
+        candles = [
+            Candle(
+                timestamp=c.timestamp,
+                open=c.open,
+                high=c.high,
+                low=c.low,
+                close=c.close,
+                volume=c.volume
+            )
+            for c in request.candles
+        ]
+        
+        # Validar quantidade de candles
+        if len(candles) < 50:
+            logger.warning(f"Poucos candles recebidos: {len(candles)}. Recomendado: 50+")
+        
+        # Inicializar Trading Engine
+        engine = TradingEngine(
+            min_score=70,  # Mínimo 70 pontos para gerar sinal
+            risk_reward_min=2.0,  # RR mínimo 1:2
+            max_daily_loss_pct=2.0,
+            max_drawdown_pct=10.0
+        )
+        
+        # Analisar setup
+        signal = engine.analyze(candles, request.capital)
+        
+        # Explicação com IA (opcional)
+        ai_explanation = None
+        if request.explain_with_ai:
+            try:
+                api_key = x_custom_api_key if x_custom_api_key else os.environ.get('EMERGENT_LLM_KEY')
+                
+                if api_key:
+                    # Criar contexto para a IA
+                    context = f"""
+**ANÁLISE TÉCNICA MATEMÁTICA COMPLETA**
+
+**SINAL GERADO:** {signal.signal.value}
+**SCORE DE QUALIDADE:** {signal.score}/100
+**CONFIANÇA:** {signal.confidence*100:.1f}%
+
+**NÍVEIS DE PREÇO:**
+- Entrada: {signal.entry_price:.5f}
+- Stop Loss: {signal.stop_loss:.5f}
+- Take Profit 1: {signal.take_profit_1:.5f}
+- Take Profit 2: {signal.take_profit_2:.5f}
+
+**INDICADORES TÉCNICOS:**
+- Tendência: {signal.trend.value}
+- EMA 20: {signal.ema_20:.5f}
+- EMA 50: {signal.ema_50:.5f}
+- RSI: {signal.rsi_value:.1f}
+- ATR: {signal.atr_value:.5f}
+
+**GESTÃO DE RISCO:**
+- Risk/Reward TP1: 1:{signal.risk_reward_1:.2f}
+- Risk/Reward TP2: 1:{signal.risk_reward_2:.2f}
+- Risco por trade: ${signal.risk_amount:.2f}
+
+**RAZÕES DO SINAL:**
+{chr(10).join(signal.reasons)}
+
+**AVISOS:**
+{chr(10).join(signal.warnings) if signal.warnings else "Nenhum aviso"}
+"""
+                    
+                    chat_client = LlmChat(
+                        api_key=api_key,
+                        session_id="trading-analysis",
+                        system_message="""Você é um analista técnico profissional especializado em trading.
+Sua função é explicar de forma clara e didática as decisões do motor de trading matemático.
+
+Ao receber uma análise técnica, você deve:
+1. Validar se o sinal faz sentido do ponto de vista técnico
+2. Explicar em linguagem simples os motivos da recomendação
+3. Destacar os pontos fortes e fracos do setup
+4. Dar dicas de execução e gestão de risco
+5. Mencionar condições que invalidariam o setup
+
+Seja direto, profissional e educativo. Use emojis para destacar pontos importantes."""
+                    )
+                    chat_client.with_model("openai", "gpt-5.1")
+                    
+                    user_msg = UserMessage(text=f"Explique esta análise técnica de forma profissional:\n\n{context}")
+                    ai_explanation = await chat_client.send_message(user_msg)
+                    
+            except Exception as e:
+                logger.error(f"Erro ao gerar explicação da IA: {str(e)}")
+                ai_explanation = "⚠️ Não foi possível gerar explicação detalhada. Análise técnica disponível acima."
+        
+        # Montar resposta
+        response = TradeSetupResponse(
+            signal=signal.signal.value,
+            score=signal.score,
+            confidence=signal.confidence,
+            entry_price=signal.entry_price,
+            stop_loss=signal.stop_loss,
+            take_profit_1=signal.take_profit_1,
+            take_profit_2=signal.take_profit_2,
+            trend=signal.trend.value,
+            rsi_value=signal.rsi_value,
+            ema_20=signal.ema_20,
+            ema_50=signal.ema_50,
+            atr_value=signal.atr_value,
+            risk_reward_1=signal.risk_reward_1,
+            risk_reward_2=signal.risk_reward_2,
+            risk_amount=signal.risk_amount,
+            reasons=signal.reasons,
+            warnings=signal.warnings,
+            ai_explanation=ai_explanation
+        )
+        
+        return response
+        
+    except Exception as e:
+        error_msg = str(e)
+        logger.error(f"Erro no endpoint trade-setup: {error_msg}")
+        raise HTTPException(status_code=500, detail=f"Erro na análise de setup: {error_msg}")
+
+
+@api_router.post("/backtest", response_model=BacktestResponse)
+async def run_backtest(request: BacktestRequest):
+    """
+    📊 Endpoint de Backtest - Testa estratégia em dados históricos
+    
+    Simula trades com a estratégia do Trading Engine para validar
+    win rate e performance.
+    """
+    try:
+        # Converter input para objetos Candle
+        candles = [
+            Candle(
+                timestamp=c.timestamp,
+                open=c.open,
+                high=c.high,
+                low=c.low,
+                close=c.close,
+                volume=c.volume
+            )
+            for c in request.candles
+        ]
+        
+        if len(candles) < 100:
+            raise HTTPException(
+                status_code=400,
+                detail="Backtest requer no mínimo 100 candles históricos"
+            )
+        
+        # Inicializar engine e backtester
+        engine = TradingEngine(min_score=70, risk_reward_min=2.0)
+        backtester = Backtester(engine)
+        
+        # Executar backtest
+        results = backtester.run(candles, request.initial_capital)
+        
+        return BacktestResponse(**results)
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        error_msg = str(e)
+        logger.error(f"Erro no backtest: {error_msg}")
+        raise HTTPException(status_code=500, detail=f"Erro no backtest: {error_msg}")
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
