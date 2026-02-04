@@ -301,7 +301,7 @@ class CryptoTradingEngine:
         rr_2 = reward_2 / risk if risk > 0 else 0
         
         # Validar RR mínimo
-        if signal_type != SignalType.WAIT and rr_1 < 2.0:
+        if signal_type != SignalType.WAIT and rr_1 < 1.8:  # Reduzido de 2.0 para 1.8
             warnings.append(f"⚠️ Risk/Reward insuficiente ({rr_1:.2f})")
             signal_type = SignalType.WAIT
         
