@@ -86,6 +86,74 @@ class ImageGenerationResponse(BaseModel):
     assistant_message: Message
 
 
+# === NEW: Trading Engine Models ===
+class CandleInput(BaseModel):
+    """Input para um candle OHLCV"""
+    timestamp: int
+    open: float
+    high: float
+    low: float
+    close: float
+    volume: float
+
+
+class TradeSetupRequest(BaseModel):
+    """Request para análise de setup de trading"""
+    candles: List[CandleInput]
+    capital: float = 10000.0
+    explain_with_ai: bool = True  # Se True, IA explica a decisão
+
+
+class TradeSetupResponse(BaseModel):
+    """Response com análise completa do setup"""
+    signal: str  # "CALL", "PUT", "WAIT"
+    score: int
+    confidence: float
+    
+    # Níveis
+    entry_price: float
+    stop_loss: float
+    take_profit_1: float
+    take_profit_2: float
+    
+    # Análise técnica
+    trend: str
+    rsi_value: float
+    ema_20: float
+    ema_50: float
+    atr_value: float
+    
+    # Risk Management
+    risk_reward_1: float
+    risk_reward_2: float
+    risk_amount: float
+    
+    # Explicação
+    reasons: List[str]
+    warnings: List[str]
+    ai_explanation: Optional[str] = None
+
+
+class BacktestRequest(BaseModel):
+    """Request para backtest"""
+    candles: List[CandleInput]
+    initial_capital: float = 10000.0
+
+
+class BacktestResponse(BaseModel):
+    """Response do backtest"""
+    total_trades: int
+    wins: int
+    losses: int
+    win_rate: float
+    initial_capital: float
+    final_capital: float
+    profit: float
+    profit_pct: float
+    profit_factor: float
+
+
+
 # Chat endpoint
 @api_router.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest, x_custom_api_key: Optional[str] = Header(None)):
