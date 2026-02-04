@@ -274,7 +274,7 @@ class CryptoTradingEngine:
         # Filtro de volatilidade extrema
         if volatility == "HIGH":
             warnings.append("⚠️ Volatilidade ALTA - risco aumentado")
-            if score < 85:  # Exigir score muito alto em alta volatilidade
+            if score < 75:  # Reduzido de 85 para 75
                 signal_type = SignalType.WAIT
                 warnings.append("⚠️ Score insuficiente para volatilidade alta")
         
